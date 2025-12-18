@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时尚文本轮播播放器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #10b981;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-panel: #ffffff;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 40px -5px rgba(0, 0, 0, 0.12);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            transition: background 0.5s ease;
+        }
+
+        #app-container {
+            width: 1000px;
+            max-width: 92vw;
+            height: 680px;
+            max-height: 88vh;
+            background: var(--bg-primary);
+            border-radius: 24px;
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 时尚简约头部 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 28px;
+            background: var(--bg-primary);
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 1.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.025em;
+        }
+
+        .header h1 i {
+            color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 9px 18px;
+            background: var(--bg-secondary);
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: #f3f4f6;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #f97316);
+            color: white;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #dc2626, #ea580c);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        /* 主要内容区域 */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 28px;
+            overflow: hidden;
+        }
+
+        .current-info {
+            text-align: center;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+        }
+
+        .current-file {
+            background: linear-gradient(135deg, var(--bg-secondary), #f3f4f6);
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 15px;
+            display: inline-block;
+            font-weight: 500;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid #e5e7eb;
+        }
+
+        /* 文本显示区域 */
+        .text-display-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 20px;
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e5e7eb;
+        }
+
+        #text-scroll-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #current-text {
+            position: absolute;
+            white-space: nowrap;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-primary);
+            font-size: 2.2rem;
+            font-weight: 700;
+            padding: 0 28px;
+            transition: color 0.3s ease;
+            letter-spacing: -0.02em;
+        }
+
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            transition: width 0.1s;
+            border-radius: 0 0 0 20px;
+        }
+
+        /* 统一底部控制区域 */
+        .controls-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            padding: 18px;
+            background: var(--bg-primary);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid #e5e7eb;
+            position: relative;
+            z-index: 10;
+        }
+
+        .control-btn {
+            width: 64px;
+            height: 64px;
+            border-radius: 14px;
+            background: var(--bg-primary);
+            border: 1px solid #e5e7eb;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .control-btn:hover::before {
+            opacity: 1;
+        }
+
+        .control-btn.active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .play-btn {
+            width: 88px;
+            height: 88px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            font-size: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
+        }
+
+        .play-btn:hover {
+            box-shadow: 0 12px 28px rgba(99, 102, 241, 0.35);
+            transform: translateY(-5px) scale(1.05);
+            color: white;
+            border: none;
+        }
+
+        /* 统一面板弹出方式 - 从底部弹出 */
+        .control-panel {
+            position: absolute;
+            bottom: calc(100% + 12px);
+            left: 0;
+            right: 0;
+            background: var(--bg-panel);
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid #e5e7eb;
+            z-index: 100;
+            transform: translateY(20px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .control-panel.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .control-panel h3 {
+            margin: 0 0 16px 0;
+            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: 600;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .panel-item {
+            padding: 12px 16px;
+            border-radius: 10px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 6px;
+        }
+
+        .panel-item:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* 颜色选项 */
+        .color-options {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .color-option {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .color-option.active {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        /* 模态窗口样式 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--bg-primary);
+            border-radius: 20px;
+            padding: 28px;
+            width: 500px;
+            max-width: 90vw;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            transform: translateY(30px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal.visible .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-header h2 i {
+            color: var(--primary-color);
+        }
+
+        .close-btn {
+            background: var(--bg-secondary);
+            border: none;
+            color: var(--text-secondary);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 10px;
+            transition: all 0.2s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            color: var(--text-primary);
+            background: #f3f4f6;
+            transform: rotate(90deg);
+        }
+
+        /* 文件列表 */
+        .file-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 320px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .folder-item {
+            margin: 10px 0;
+        }
+
+        .folder-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-primary);
+            transition: background 0.2s;
+        }
+
+        .folder-header:hover {
+            background: #f3f4f6;
+        }
+
+        .folder-content {
+            margin-left: 28px;
+            margin-top: 10px;
+            border-left: 2px dashed #d1d5db;
+            padding-left: 20px;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            color: var(--text-primary);
+            transition: all 0.2s;
+            margin-bottom: 8px;
+        }
+
+        .file-item:hover {
+            background: #f3f4f6;
+            transform: translateX(4px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .file-info {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .file-count {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .file-action {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .file-action:hover {
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .empty-message {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 40px 20px;
+        }
+
+        /* 速度选项 */
+        .speed-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .speed-option {
+            padding: 14px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            text-align: center;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .speed-option:hover {
+            background: #f3f4f6;
+        }
+
+        .speed-option.active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        /* 字体大小选项 */
+        .font-size-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .font-size-option {
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .font-size-option:hover {
+            background: #f3f4f6;
+        }
+
+        .font-size-option.active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        /* 背景选项 */
+        .background-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .background-option {
+            height: 60px;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .background-option:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+
+        .background-option.active {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        /* 滑块 */
+        .slider-container {
+            margin-top: 24px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            background: #4f46e5;
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 通知 */
+        .notification {
+            position: fixed;
+            top: 28px;
+            right: 28px;
+            padding: 16px 22px;
+            background: var(--bg-primary);
+            border-radius: 14px;
+            color: var(--text-primary);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 3000;
+            animation: slideIn 0.3s, fadeOut 0.3s 2.7s;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        .notification.success {
+            border-left-color: var(--accent-color);
+        }
+
+        .notification.success i {
+            color: var(--accent-color);
+        }
+
+        .notification.error {
+            border-left-color: #ef4444;
+        }
+
+        .notification.error i {
+            color: #ef4444;
+        }
+
+        .notification.info {
+            border-left-color: var(--primary-color);
+        }
+
+        .notification.info i {
+            color: var(--primary-color);
+        }
+
+        .notification.warning {
+            border-left-color: #f59e0b;
+        }
+
+        .notification.warning i {
+            color: #f59e0b;
+        }
+
+        /* 图标模式 */
+        .icon-mode {
+            position: fixed;
+            bottom: 36px;
+            right: 36px;
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .icon-mode.hidden {
+            display: none;
+        }
+
+        .icon-mode:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 16px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        /* 隐藏的文件输入 */
+        .file-input-wrapper {
+            display: none;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            #app-container {
+                width: 96vw;
+                height: 96vh;
+                max-height: 96vh;
+                border-radius: 20px;
+            }
+            
+            #current-text {
+                font-size: 1.8rem;
+            }
+            
+            .controls {
+                gap: 12px;
+            }
+            
+            .control-btn {
+                width: 56px;
+                height: 56px;
+                font-size: 20px;
+            }
+            
+            .play-btn {
+                width: 76px;
+                height: 76px;
+                font-size: 26px;
+            }
+            
+            .modal-content {
+                width: 90vw;
+                padding: 22px;
+            }
+            
+            .speed-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .background-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 主应用容器 -->
+    <div id="app-container" class="app-window">
+        <div class="header">
+            <h1><i class="fa fa-file-text"></i> 时尚文本轮播播放器</h1>
+            <div class="header-controls">
+                <button id="window-toggle" class="btn">
+                    <i class="fa fa-window-minimize"></i> 最小化
+                </button>
+                <button id="close-btn" class="btn btn-danger">
+                    <i class="fa fa-times"></i> 关闭
+                </button>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="current-info">
+                <div style="margin-bottom: 6px; color: var(--text-secondary); font-size: 14px;">当前播放</div>
+                <div id="current-file-name" class="current-file">示例文本 1</div>
+            </div>
+            
+            <div class="text-display-container">
+                <div id="text-scroll-container">
+                    <div id="current-text">欢迎使用时尚文本轮播播放器</div>
+                </div>
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+            
+            <div class="controls-container">
+                <div class="controls">
+                    <button id="play-btn" class="control-btn play-btn">
+                        <i class="fa fa-play"></i>
+                    </button>
+                    
+                    <button id="import-btn" class="control-btn" title="导入文本">
+                        <i class="fa fa-upload"></i>
+                    </button>
+                    
+                    <button id="speed-btn" class="control-btn" title="播放速度">
+                        <i class="fa fa-tachometer"></i>
+                    </button>
+                    
+                    <button id="text-select-btn" class="control-btn" title="选择文本">
+                        <i class="fa fa-list"></i>
+                    </button>
+                    
+                    <button id="color-btn" class="control-btn" title="文本颜色">
+                        <i class="fa fa-paint-brush"></i>
+                    </button>
+                    
+                    <button id="font-btn" class="control-btn" title="字体大小">
+                        <i class="fa fa-font"></i>
+                    </button>
+                    
+                    <button id="bg-btn" class="control-btn" title="背景设置">
+                        <i class="fa fa-image"></i>
+                    </button>
+                    
+                    <button id="delete-btn" class="control-btn" title="删除当前文本">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+                
+                <!-- 导入面板 -->
+                <div id="import-panel" class="control-panel">
+                    <h3>导入文本</h3>
+                    <div class="panel-item" id="import-file">
+                        <i class="fa fa-file-text-o"></i>
+                        <span>上传文件</span>
+                    </div>
+                    <div class="panel-item" id="import-folder">
+                        <i class="fa fa-folder-open-o"></i>
+                        <span>上传文件夹</span>
+                    </div>
+                </div>
+                
+                <!-- 速度面板 -->
+                <div id="speed-panel" class="control-panel">
+                    <h3>播放速度</h3>
+                    <div class="speed-options">
+                        <div class="speed-option active" data-speed="0.5">0.5x</div>
+                        <div class="speed-option" data-speed="1">1x</div>
+                        <div class="speed-option" data-speed="1.5">1.5x</div>
+                        <div class="speed-option" data-speed="2">2x</div>
+                    </div>
+                </div>
+                
+                <!-- 颜色面板 -->
+                <div id="color-panel" class="control-panel">
+                    <h3>文本颜色</h3>
+                    <div class="color-options">
+                        <div class="color-option active" style="background: #1f2937;" data-color="#1f2937"></div>
+                        <div class="color-option" style="background: #0f766e;" data-color="#0f766e"></div>
+                        <div class="color-option" style="background: #1e40af;" data-color="#1e40af"></div>
+                        <div class="color-option" style="background: #7c2d12;" data-color="#7c2d12"></div>
+                        <div class="color-option" style="background: #7b3fe4;" data-color="#7b3fe4"></div>
+                        <div class="color-option" style="background: #be185d;" data-color="#be185d"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 图标模式 -->
+    <div id="icon-mode" class="icon-mode hidden">
+        <i class="fa fa-file-text-o"></i>
+    </div>
+    
+    <!-- 模态窗口：文件列表 -->
+    <div id="file-list-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa fa-list"></i> 选择播放文本</h2>
+                <button class="close-btn" id="close-file-list-modal">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div id="file-list-container" class="file-list">
+                <!-- 文件列表将动态生成 -->
+            </div>
+            <div id="no-files-message" class="empty-message">
+                <i class="fa fa-folder-open-o" style="font-size: 48px; margin-bottom: 16px; color: #d1d5db;"></i>
+                <p>暂无文本文件</p>
+                <p style="font-size: 14px; margin-top: 8px;">点击导入按钮添加文本文件</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 模态窗口：字体大小 -->
+    <div id="font-size-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa fa-font"></i> 字体大小</h2>
+                <button class="close-btn" id="close-font-size-modal">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="font-size-options">
+                <div class="font-size-option" data-size="small">
+                    <div style="font-weight: 600; margin-bottom: 4px;">小号字体</div>
+                    <div style="font-size: 13px; color: var(--text-secondary);">适合快速阅读</div>
+                </div>
+                <div class="font-size-option active" data-size="medium">
+                    <div style="font-weight: 600; margin-bottom: 4px;">中号字体</div>
+                    <div style="font-size: 13px; color: var(--text-secondary);">标准大小</div>
+                </div>
+                <div class="font-size-option" data-size="large">
+                    <div style="font-weight: 600; margin-bottom: 4px;">大号字体</div>
+                    <div style="font-size: 13px; color: var(--text-secondary);">适合远距离观看</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 模态窗口：背景设置 -->
+    <div id="background-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa fa-image"></i> 背景设置</h2>
+                <button class="close-btn" id="close-background-modal">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div>
+                <h3 style="color: var(--text-primary); margin-bottom: 12px; font-size: 16px;">背景颜色</h3>
+                <div class="background-options">
+                    <div class="background-option active" style="background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);" data-bg="default"></div>
+                    <div class="background-option" style="background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);" data-bg="blue"></div>
+                    <div class="background-option" style="background: linear-gradient(135deg, #f0abfc 0%, #c77dff 100%);" data-bg="purple"></div>
+                    <div class="background-option" style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);" data-bg="green"></div>
+                    <div class="background-option" style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);" data-bg="red"></div>
+                    <div class="background-option" style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%);" data-bg="dark"></div>
+                </div>
+                
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>背景透明度</span>
+                        <span id="opacity-value">100%</span>
+                    </div>
+                    <input type="range" id="background-opacity" min="0.1" max="1" step="0.1" value="1" class="slider">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 文件输入 -->
+    <input type="file" id="file-input" class="file-input-wrapper" accept=".txt,.text" multiple>
+    <input type="file" id="folder-input" class="file-input-wrapper" webkitdirectory directory multiple>
+    
+    <!-- 通知区域 -->
+    <div id="notification-area"></div>
+    
+    <script>
+        class TextCarousel {
+            constructor() {
+                this.isPlaying = false;
+                this.currentSpeed = 1;
+                this.currentTextIndex = 0;
+                this.textColor = '#1f2937';
+                this.texts = [];
+                this.fontSize = 'medium';
+                this.animationId = null;
+                this.currentPosition = 0;
+                this.baseSpeed = 2;
+                this.backgroundPreset = 'default';
+                this.backgroundOpacity = 1;
+                this.currentPanel = null;
+                this.currentFolder = null;
+                
+                // 初始化
+                this.init();
+            }
+
+            init() {
+                this.bindElements();
+                this.bindEvents();
+                this.loadFromStorage();
+                this.addExampleTexts();
+                this.updateUI();
+                this.displayCurrentText();
+            }
+
+            bindElements() {
+                // 主容器
+                this.appContainer = document.getElementById('app-container');
+                this.iconMode = document.getElementById('icon-mode');
+                
+                // 窗口控制
+                this.windowToggleBtn = document.getElementById('window-toggle');
+                this.closeBtn = document.getElementById('close-btn');
+                
+                // 播放控制
+                this.playBtn = document.getElementById('play-btn');
+                this.textElement = document.getElementById('current-text');
+                this.scrollContainer = document.getElementById('text-scroll-container');
+                this.progressBar = document.getElementById('progress-bar');
+                this.currentFileName = document.getElementById('current-file-name');
+                
+                // 控制按钮
+                this.importBtn = document.getElementById('import-btn');
+                this.speedBtn = document.getElementById('speed-btn');
+                this.textSelectBtn = document.getElementById('text-select-btn');
+                this.colorBtn = document.getElementById('color-btn');
+                this.fontBtn = document.getElementById('font-btn');
+                this.bgBtn = document.getElementById('bg-btn');
+                this.deleteBtn = document.getElementById('delete-btn');
+                
+                // 控制面板
+                this.importPanel = document.getElementById('import-panel');
+                this.speedPanel = document.getElementById('speed-panel');
+                this.colorPanel = document.getElementById('color-panel');
+                
+                // 模态窗口
+                this.fileListModal = document.getElementById('file-list-modal');
+                this.fontSizeModal = document.getElementById('font-size-modal');
+                this.backgroundModal = document.getElementById('background-modal');
+                
+                // 文件列表
+                this.fileListContainer = document.getElementById('file-list-container');
+                this.noFilesMessage = document.getElementById('no-files-message');
+                
+                // 关闭按钮
+                this.closeFileListModalBtn = document.getElementById('close-file-list-modal');
+                this.closeFontSizeModalBtn = document.getElementById('close-font-size-modal');
+                this.closeBackgroundModalBtn = document.getElementById('close-background-modal');
+                
+                // 文件输入
+                this.fileInput = document.getElementById('file-input');
+                this.folderInput = document.getElementById('folder-input');
+                
+                // 导入面板按钮
+                this.importFileBtn = document.getElementById('import-file');
+                this.importFolderBtn = document.getElementById('import-folder');
+                
+                // 背景设置
+                this.backgroundOpacityInput = document.getElementById('background-opacity');
+                this.opacityValue = document.getElementById('opacity-value');
+                
+                // 通知区域
+                this.notificationArea = document.getElementById('notification-area');
+            }
+
+            bindEvents() {
+                // 窗口控制
+                this.windowToggleBtn.addEventListener('click', () => this.toggleWindowMode());
+                this.closeBtn.addEventListener('click', () => this.closeApp());
+                this.iconMode.addEventListener('click', () => this.toggleWindowMode());
+                
+                // 播放控制
+                this.playBtn.addEventListener('click', () => this.togglePlayPause());
+                
+                // 文本双击切换颜色
+                this.textElement.addEventListener('dblclick', () => {
+                    this.togglePanel(this.colorPanel);
+                });
+                
+                // 控制按钮点击事件 - 统一使用togglePanel方法
+                this.importBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.togglePanel(this.importPanel);
+                });
+                
+                this.speedBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.togglePanel(this.speedPanel);
+                });
+                
+                this.textSelectBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.showFileListModal();
+                    this.hideAllPanels();
+                });
+                
+                this.colorBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.togglePanel(this.colorPanel);
+                });
+                
+                this.fontBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.showFontSizeModal();
+                    this.hideAllPanels();
+                });
+                
+                this.bgBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.showBackgroundModal();
+                    this.hideAllPanels();
+                });
+                
+                // 修复删除按钮点击无响应问题
+                this.deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.deleteCurrentText();
+                    this.hideAllPanels();
+                });
+                
+                // 导入面板
+                this.importFileBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.fileInput.click();
+                    this.hideAllPanels();
+                });
+                
+                this.importFolderBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.folderInput.click();
+                    this.hideAllPanels();
+                });
+                
+                // 文件输入事件
+                this.fileInput.addEventListener('change', (e) => this.handleFileUpload(e));
+                this.folderInput.addEventListener('change', (e) => this.handleFolderUpload(e));
+                
+                // 速度选择
+                document.querySelectorAll('.speed-option').forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const speed = parseFloat(option.dataset.speed);
+                        this.setSpeed(speed);
+                        this.hideAllPanels();
+                    });
+                });
+                
+                // 颜色选择
+                document.querySelectorAll('.color-option').forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const color = option.dataset.color;
+                        this.setTextColor(color);
+                        this.hideAllPanels();
+                    });
+                });
+                
+                // 字体大小选择
+                document.querySelectorAll('.font-size-option').forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const size = option.dataset.size;
+                        this.setFontSize(size);
+                        this.hideFontSizeModal();
+                    });
+                });
+                
+                // 背景选择
+                document.querySelectorAll('.background-option').forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const bg = option.dataset.bg;
+                        this.setBackgroundColor(bg);
+                    });
+                });
+                
+                // 背景透明度
+                this.backgroundOpacityInput.addEventListener('input', (e) => {
+                    this.setBackgroundOpacity(parseFloat(e.target.value));
+                });
+                
+                // 关闭模态窗口
+                this.closeFileListModalBtn.addEventListener('click', () => this.hideFileListModal());
+                this.closeFontSizeModalBtn.addEventListener('click', () => this.hideFontSizeModal());
+                this.closeBackgroundModalBtn.addEventListener('click', () => this.hideBackgroundModal());
+                
+                // 点击外部关闭面板
+                document.addEventListener('click', (e) => {
+                    if (this.currentPanel && !this.currentPanel.contains(e.target)) {
+                        this.hideAllPanels();
+                    }
+                });
+                
+                // 点击模态窗口背景关闭
+                this.fileListModal.addEventListener('click', (e) => {
+                    if (e.target === this.fileListModal) this.hideFileListModal();
+                });
+                
+                this.fontSizeModal.addEventListener('click', (e) => {
+                    if (e.target === this.fontSizeModal) this.hideFontSizeModal();
+                });
+                
+                this.backgroundModal.addEventListener('click', (e) => {
+                    if (e.target === this.backgroundModal) this.hideBackgroundModal();
+                });
+            }
+
+            // 切换面板显示/隐藏
+            togglePanel(panel) {
+                if (this.currentPanel === panel && panel.classList.contains('active')) {
+                    this.hideAllPanels();
+                } else {
+                    this.hideAllPanels();
+                    panel.classList.add('active');
+                    this.currentPanel = panel;
+                }
+            }
+
+            // 隐藏所有面板
+            hideAllPanels() {
+                document.querySelectorAll('.control-panel').forEach(panel => {
+                    panel.classList.remove('active');
+                });
+                this.currentPanel = null;
+            }
+
+            // 切换窗口/图标模式
+            toggleWindowMode() {
+                if (this.appContainer.style.display !== 'none') {
+                    this.appContainer.style.display = 'none';
+                    this.iconMode.classList.remove('hidden');
+                    this.pause();
+                } else {
+                    this.appContainer.style.display = 'flex';
+                    this.iconMode.classList.add('hidden');
+                }
+                this.saveToStorage();
+            }
+
+            // 关闭应用
+            closeApp() {
+                if (confirm('确定要关闭文本轮播播放器吗？')) {
+                    window.close();
+                }
+            }
+
+            // 播放/暂停切换
+            togglePlayPause() {
+                if (this.texts.length === 0) {
+                    this.showNotification('请先添加文本文件', 'warning');
+                    return;
+                }
+                
+                if (this.isPlaying) {
+                    this.pause();
+                } else {
+                    this.play();
+                }
+            }
+
+            // 播放
+            play() {
+                if (this.isPlaying) return;
+                
+                this.isPlaying = true;
+                this.playBtn.innerHTML = '<i class="fa fa-pause"></i>';
+                this.animateText();
+            }
+
+            // 暂停
+            pause() {
+                if (!this.isPlaying) return;
+                
+                this.isPlaying = false;
+                this.playBtn.innerHTML = '<i class="fa fa-play"></i>';
+                if (this.animationId) {
+                    cancelAnimationFrame(this.animationId);
+                    this.animationId = null;
+                }
+            }
+
+            // 文本滚动动画
+            animateText() {
+                if (!this.isPlaying) return;
+                
+                const textWidth = this.textElement.offsetWidth;
+                const containerWidth = this.scrollContainer.offsetWidth;
+                
+                // 计算移动距离
+                this.currentPosition -= this.baseSpeed * this.currentSpeed;
+                
+                // 更新文本位置
+                this.textElement.style.transform = `translateY(-50%) translateX(${this.currentPosition}px)`;
+                
+                // 更新进度条
+                const maxPosition = textWidth + containerWidth;
+                const progress = Math.max(0, Math.min(100, 
+                    100 * (Math.abs(this.currentPosition) / maxPosition)));
+                this.progressBar.style.width = `${progress}%`;
+                
+                // 当文本完全移出左侧时，切换到下一个文本
+                if (Math.abs(this.currentPosition) > textWidth + containerWidth) {
+                    this.nextText();
+                    this.displayCurrentText();
+                    this.currentPosition = containerWidth;
+                    this.progressBar.style.width = '0%';
+                }
+                
+                this.animationId = requestAnimationFrame(() => this.animateText());
+            }
+            
+            // 切换到下一个文本
+            nextText() {
+                if (this.currentFolder && this.currentFolder.files && this.currentFolder.files.length > 0) {
+                    // 如果在文件夹内播放，按文件夹内顺序切换
+                    this.currentTextIndex = (this.currentTextIndex + 1) % this.currentFolder.files.length;
+                } else {
+                    // 否则在所有文本中切换
+                    this.currentTextIndex = (this.currentTextIndex + 1) % this.texts.length;
+                }
+            }
+
+            // 显示当前文本
+            displayCurrentText() {
+                if (this.texts.length === 0) {
+                    this.textElement.textContent = '请添加文本文件';
+                    this.currentFileName.textContent = '无';
+                    return;
+                }
+                
+                let currentText;
+                if (this.currentFolder && this.currentFolder.files && this.currentFolder.files.length > 0) {
+                    currentText = this.currentFolder.files[this.currentTextIndex];
+                } else {
+                    currentText = this.texts[this.currentTextIndex];
+                }
+                
+                this.textElement.textContent = currentText.content;
+                this.textElement.style.color = this.textColor;
+                
+                // 设置字体大小
+                switch(this.fontSize) {
+                    case 'small':
+                        this.textElement.style.fontSize = '1.8rem';
+                        break;
+                    case 'medium':
+                        this.textElement.style.fontSize = '2.2rem';
+                        break;
+                    case 'large':
+                        this.textElement.style.fontSize = '2.8rem';
+                        break;
+                }
+                
+                // 更新当前文件名显示
+                if (currentText.folder) {
+                    this.currentFileName.textContent = `${currentText.folder.name}/${currentText.name}`;
+                } else {
+                    this.currentFileName.textContent = currentText.name;
+                }
+            }
+
+            // 显示文件列表模态框
+            showFileListModal() {
+                this.fileListModal.classList.add('visible');
+                this.renderFileList();
+            }
+
+            // 隐藏文件列表模态框
+            hideFileListModal() {
+                this.fileListModal.classList.remove('visible');
+            }
+
+            // 显示字体大小模态框
+            showFontSizeModal() {
+                this.fontSizeModal.classList.add('visible');
+            }
+
+            // 隐藏字体大小模态框
+            hideFontSizeModal() {
+                this.fontSizeModal.classList.remove('visible');
+            }
+
+            // 显示背景设置模态框
+            showBackgroundModal() {
+                this.backgroundModal.classList.add('visible');
+            }
+
+            // 隐藏背景设置模态框
+            hideBackgroundModal() {
+                this.backgroundModal.classList.remove('visible');
+            }
+
+            // 渲染文件列表
+            renderFileList() {
+                this.fileListContainer.innerHTML = '';
+                
+                if (this.texts.length === 0) {
+                    this.noFilesMessage.style.display = 'block';
+                    return;
+                }
+                
+                this.noFilesMessage.style.display = 'none';
+                
+                // 分离文件夹和单独文件
+                const folders = {};
+                const files = [];
+                
+                this.texts.forEach(text => {
+                    if (text.folder) {
+                        if (!folders[text.folder.id]) {
+                            folders[text.folder.id] = {
+                                ...text.folder,
+                                files: []
+                            };
+                        }
+                        folders[text.folder.id].files.push(text);
+                    } else {
+                        files.push(text);
+                    }
+                });
+                
+                // 渲染单独文件
+                files.forEach(file => {
+                    const fileItem = this.createFileItem(file);
+                    this.fileListContainer.appendChild(fileItem);
+                });
+                
+                // 渲染文件夹
+                Object.values(folders).forEach(folder => {
+                    // 按文件名排序
+                    folder.files.sort((a, b) => a.name.localeCompare(b.name));
+                    
+                    const folderElement = document.createElement('div');
+                    folderElement.className = 'folder-item';
+                    
+                    const folderHeader = document.createElement('div');
+                    folderHeader.className = 'folder-header';
+                    folderHeader.innerHTML = `<i class="fa fa-folder-o"></i> <span>${folder.name}</span> <span style="color: var(--text-secondary); font-size: 13px;">${folder.files.length}个文件</span>`;
+                    
+                    const folderContent = document.createElement('div');
+                    folderContent.className = 'folder-content';
+                    folderContent.style.display = 'none';
+                    
+                    // 文件夹点击展开/折叠
+                    folderHeader.addEventListener('click', () => {
+                        folderContent.style.display = folderContent.style.display === 'none' ? 'block' : 'none';
+                        folderHeader.querySelector('i').className = folderContent.style.display === 'none' 
+                            ? 'fa fa-folder-o' 
+                            : 'fa fa-folder-open-o';
+                    });
+                    
+                    // 添加文件夹内的文件
+                    folder.files.forEach(file => {
+                        const fileItem = this.createFileItem(file);
+                        folderContent.appendChild(fileItem);
+                    });
+                    
+                    // 添加播放整个文件夹按钮
+                    const playFolderBtn = document.createElement('div');
+                    playFolderBtn.className = 'file-item';
+                    playFolderBtn.style.marginTop = '12px';
+                    playFolderBtn.style.background = 'linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05))';
+                    playFolderBtn.innerHTML = `
+                        <div class="file-info">
+                            <div class="file-name"><i class="fa fa-play-circle-o"></i> 播放整个文件夹</div>
+                            <div class="file-count">按顺序播放所有文件</div>
+                        </div>
+                        <button class="file-action">选择</button>
+                    `;
+                    
+                    playFolderBtn.querySelector('.file-action').addEventListener('click', () => {
+                        this.currentFolder = folder;
+                        this.currentTextIndex = 0;
+                        this.displayCurrentText();
+                        this.hideFileListModal();
+                        this.showNotification(`已选择播放文件夹: ${folder.name}`, 'success');
+                        this.play();
+                    });
+                    
+                    folderContent.appendChild(playFolderBtn);
+                    
+                    folderElement.appendChild(folderHeader);
+                    folderElement.appendChild(folderContent);
+                    this.fileListContainer.appendChild(folderElement);
+                });
+            }
+            
+            // 创建文件列表项
+            createFileItem(file) {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                
+                fileItem.innerHTML = `
+                    <div class="file-info">
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-count">${file.content.length} 字符</div>
+                    </div>
+                    <button class="file-action">选择</button>
+                `;
+                
+                fileItem.querySelector('.file-action').addEventListener('click', () => {
+                    this.currentFolder = null; // 清除当前文件夹，只播放单个文件
+                    this.currentTextIndex = this.texts.findIndex(t => t.id === file.id);
+                    this.displayCurrentText();
+                    this.hideFileListModal();
+                    this.showNotification(`已选择: ${file.name}`, 'success');
+                    this.play();
+                });
+                
+                return fileItem;
+            }
+
+            // 处理文件上传
+            handleFileUpload(e) {
+                const files = e.target.files;
+                if (!files.length) return;
+                
+                Array.from(files).forEach(file => {
+                    if (file.type.includes('text') || file.name.endsWith('.txt')) {
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            const content = event.target.result;
+                            this.addText({
+                                id: Date.now() + Math.random(),
+                                name: file.name,
+                                content: content,
+                                added: new Date().getTime()
+                            });
+                        };
+                        reader.readAsText(file);
+                    }
+                });
+                
+                this.fileInput.value = '';
+                this.showNotification(`成功导入 ${files.length} 个文件`, 'success');
+            }
+
+            // 处理文件夹上传
+            handleFolderUpload(e) {
+                const files = e.target.files;
+                if (!files.length) return;
+                
+                // 按文件夹分组
+                const folders = {};
+                
+                Array.from(files).forEach(file => {
+                    if (file.type.includes('text') || file.name.endsWith('.txt')) {
+                        // 获取文件夹路径
+                        const fullPath = file.webkitRelativePath;
+                        const folderName = fullPath.split('/')[0];
+                        const folderId = folderName + '_' + Date.now();
+                        
+                        if (!folders[folderId]) {
+                            folders[folderId] = {
+                                id: folderId,
+                                name: folderName,
+                                files: []
+                            };
+                        }
+                        
+                        const reader = new FileReader();
+                        const currentFile = file;
+                        reader.onload = (event) => {
+                            const content = event.target.result;
+                            this.addText({
+                                id: Date.now() + Math.random() + currentFile.name,
+                                name: currentFile.name,
+                                content: content,
+                                folder: folders[folderId],
+                                added: new Date().getTime()
+                            });
+                        };
+                        reader.readAsText(currentFile);
+                    }
+                });
+                
+                this.folderInput.value = '';
+                this.showNotification(`成功导入文件夹及文件`, 'success');
+            }
+
+            // 添加文本
+            addText(text) {
+                this.texts.push(text);
+                this.saveToStorage();
+                this.updateUI();
+                
+                // 如果是第一个文本，自动选中
+                if (this.texts.length === 1) {
+                    this.currentTextIndex = 0;
+                    this.displayCurrentText();
+                }
+            }
+
+            // 删除当前文本 - 修复无响应问题
+            deleteCurrentText() {
+                if (this.texts.length === 0) {
+                    this.showNotification('没有可删除的文本', 'info');
+                    return;
+                }
+                
+                let currentText;
+                if (this.currentFolder && this.currentFolder.files && this.currentFolder.files.length > 0) {
+                    currentText = this.currentFolder.files[this.currentTextIndex];
+                } else {
+                    currentText = this.texts[this.currentTextIndex];
+                }
+                
+                if (!currentText) {
+                    this.showNotification('找不到当前文本', 'error');
+                    return;
+                }
+                
+                const shortText = currentText.content.length > 30 
+                    ? currentText.content.substring(0, 30) + '...' 
+                    : currentText.content;
+                    
+                if (confirm(`确定要删除 "${currentText.name}" 吗？\n内容预览: ${shortText}`)) {
+                    // 从文本列表中删除
+                    this.texts = this.texts.filter(t => t.id !== currentText.id);
+                    
+                    // 如果删除的是当前文件夹中的文件，也从文件夹中移除
+                    if (this.currentFolder && this.currentFolder.files) {
+                        this.currentFolder.files = this.currentFolder.files.filter(f => f.id !== currentText.id);
+                        
+                        // 如果文件夹为空，清除当前文件夹
+                        if (this.currentFolder.files.length === 0) {
+                            this.currentFolder = null;
+                        }
+                    }
+                    
+                    // 重置索引
+                    this.currentTextIndex = Math.min(this.currentTextIndex, this.texts.length - 1);
+                    if (this.texts.length === 0) {
+                        this.currentTextIndex = 0;
+                        this.pause();
+                    }
+                    
+                    this.saveToStorage();
+                    this.updateUI();
+                    this.displayCurrentText();
+                    this.showNotification(`已删除 "${currentText.name}"`, 'success');
+                }
+            }
+
+            // 设置播放速度
+            setSpeed(speed) {
+                this.currentSpeed = speed;
+                
+                // 更新UI
+                document.querySelectorAll('.speed-option').forEach(option => {
+                    if (parseFloat(option.dataset.speed) === speed) {
+                        option.classList.add('active');
+                    } else {
+                        option.classList.remove('active');
+                    }
+                });
+                
+                this.saveToStorage();
+                this.showNotification(`播放速度已设置为 ${speed}x`, 'info');
+            }
+
+            // 设置文本颜色
+            setTextColor(color) {
+                this.textColor = color;
+                this.textElement.style.color = color;
+                
+                // 更新UI
+                document.querySelectorAll('.color-option').forEach(option => {
+                    if (option.dataset.color === color) {
+                        option.classList.add('active');
+                    } else {
+                        option.classList.remove('active');
+                    }
+                });
+                
+                this.saveToStorage();
+                this.showNotification('文本颜色已更新', 'info');
+            }
+
+            // 设置字体大小
+            setFontSize(size) {
+                this.fontSize = size;
+                
+                // 更新UI
+                document.querySelectorAll('.font-size-option').forEach(option => {
+                    if (option.dataset.size === size) {
+                        option.classList.add('active');
+                    } else {
+                        option.classList.remove('active');
+                    }
+                });
+                
+                this.displayCurrentText(); // 刷新文本显示以应用字体大小
+                this.saveToStorage();
+                this.showNotification(`字体大小已设置为 ${size === 'small' ? '小号' : size === 'medium' ? '中号' : '大号'}`, 'info');
+            }
+
+            // 设置背景颜色
+            setBackgroundColor(preset) {
+                this.backgroundPreset = preset;
+                
+                // 更新背景样式
+                const body = document.body;
+                switch(preset) {
+                    case 'default':
+                        body.style.background = 'linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%)';
+                        break;
+                    case 'blue':
+                        body.style.background = 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)';
+                        break;
+                    case 'purple':
+                        body.style.background = 'linear-gradient(135deg, #f0abfc 0%, #c77dff 100%)';
+                        break;
+                    case 'green':
+                        body.style.background = 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)';
+                        break;
+                    case 'red':
+                        body.style.background = 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)';
+                        break;
+                    case 'dark':
+                        body.style.background = 'linear-gradient(135deg, #1e293b 0%, #334155 100%)';
+                        break;
+                }
+                
+                // 应用透明度
+                body.style.opacity = this.backgroundOpacity;
+                
+                // 更新UI
+                document.querySelectorAll('.background-option').forEach(option => {
+                    if (option.dataset.bg === preset) {
+                        option.classList.add('active');
+                    } else {
+                        option.classList.remove('active');
+                    }
+                });
+                
+                this.saveToStorage();
+                this.showNotification('背景颜色已更新', 'info');
+            }
+
+            // 设置背景透明度
+            setBackgroundOpacity(opacity) {
+                this.backgroundOpacity = opacity;
+                document.body.style.opacity = opacity;
+                this.opacityValue.textContent = `${Math.round(opacity * 100)}%`;
+                this.backgroundOpacityInput.value = opacity;
+                this.saveToStorage();
+                this.showNotification(`背景透明度已设置为 ${Math.round(opacity * 100)}%`, 'info');
+            }
+
+            // 显示通知
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.innerHTML = `<i class="fa fa-${this.getNotificationIcon(type)}"></i> ${message}`;
+                
+                this.notificationArea.appendChild(notification);
+                
+                // 3秒后自动移除
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 3000);
+            }
+            
+            // 获取通知图标
+            getNotificationIcon(type) {
+                switch(type) {
+                    case 'success': return 'check-circle';
+                    case 'error': return 'exclamation-circle';
+                    case 'warning': return 'exclamation-triangle';
+                    default: return 'info-circle';
+                }
+            }
+
+            // 更新UI
+            updateUI() {
+                this.renderFileList();
+            }
+
+            // 保存到本地存储
+            saveToStorage() {
+                try {
+                    const data = {
+                        texts: this.texts,
+                        currentTextIndex: this.currentTextIndex,
+                        currentSpeed: this.currentSpeed,
+                        textColor: this.textColor,
+                        fontSize: this.fontSize,
+                        backgroundPreset: this.backgroundPreset,
+                        backgroundOpacity: this.backgroundOpacity,
+                        currentFolder: this.currentFolder ? this.currentFolder.id : null
+                    };
+                    localStorage.setItem('textCarouselData', JSON.stringify(data));
+                } catch (e) {
+                    console.error('保存数据失败:', e);
+                    this.showNotification('保存设置失败', 'error');
+                }
+            }
+
+            // 从本地存储加载
+            loadFromStorage() {
+                try {
+                    const data = localStorage.getItem('textCarouselData');
+                    if (data) {
+                        const parsed = JSON.parse(data);
+                        this.texts = parsed.texts || [];
+                        this.currentTextIndex = parsed.currentTextIndex || 0;
+                        this.currentSpeed = parsed.currentSpeed || 1;
+                        this.textColor = parsed.textColor || '#1f2937';
+                        this.fontSize = parsed.fontSize || 'medium';
+                        this.backgroundPreset = parsed.backgroundPreset || 'default';
+                        this.backgroundOpacity = parsed.backgroundOpacity || 1;
+                        
+                        // 恢复背景设置
+                        this.setBackgroundColor(this.backgroundPreset);
+                        this.setBackgroundOpacity(this.backgroundOpacity);
+                        
+                        // 恢复速度设置
+                        document.querySelectorAll('.speed-option').forEach(option => {
+                            if (parseFloat(option.dataset.speed) === this.currentSpeed) {
+                                option.classList.add('active');
+                            } else {
+                                option.classList.remove('active');
+                            }
+                        });
+                        
+                        // 恢复颜色设置
+                        document.querySelectorAll('.color-option').forEach(option => {
+                            if (option.dataset.color === this.textColor) {
+                                option.classList.add('active');
+                            } else {
+                                option.classList.remove('active');
+                            }
+                        });
+                        
+                        // 恢复字体大小设置
+                        document.querySelectorAll('.font-size-option').forEach(option => {
+                            if (option.dataset.size === this.fontSize) {
+                                option.classList.add('active');
+                            } else {
+                                option.classList.remove('active');
+                            }
+                        });
+                    }
+                } catch (e) {
+                    console.error('加载数据失败:', e);
+                    this.showNotification('加载设置失败', 'error');
+                }
+            }
+
+            // 添加示例文本
+            addExampleTexts() {
+                // 只有在没有文本时才添加示例
+                if (this.texts.length === 0) {
+                    this.addText({
+                        id: 'example-1',
+                        name: '示例文本 1',
+                        content: '欢迎使用时尚文本轮播播放器，这是一个现代化的文本展示工具。',
+                        added: new Date().getTime()
+                    });
+                    
+                    this.addText({
+                        id: 'example-2',
+                        name: '示例文本 2',
+                        content: '您可以导入文本文件或整个文件夹，系统会自动按顺序播放。',
+                        added: new Date().getTime()
+                    });
+                    
+                    this.addText({
+                        id: 'example-3',
+                        name: '示例文本 3',
+                        content: '可以调整播放速度、文本颜色、字体大小和背景样式。',
+                        added: new Date().getTime()
+                    });
+                    
+                    this.addText({
+                        id: 'example-4',
+                        name: '示例文本 4',
+                        content: '双击文本区域可以快速切换文本颜色，享受便捷操作体验。',
+                        added: new Date().getTime()
+                    });
+                }
+            }
+        }
+
+        // 初始化应用
+        document.addEventListener('DOMContentLoaded', () => {
+            const app = new TextCarousel();
+        });
+    </script>
+</body>
+</html>
