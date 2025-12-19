@@ -316,34 +316,6 @@
             color: #f59e0b;
         }
 
-        /* 章节分割器链接样式 */
-        .panel-item.chapter-splitter {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(168, 85, 247, 0.1));
-            border: 1px solid rgba(139, 92, 246, 0.3);
-        }
-
-        .panel-item.chapter-splitter:hover {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(168, 85, 247, 0.2));
-        }
-
-        .panel-item.chapter-splitter i {
-            color: #8b5cf6;
-        }
-
-        /* 数据爬取按钮样式 */
-        .panel-item.data-crawler {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(34, 197, 94, 0.1));
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-
-        .panel-item.data-crawler:hover {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(34, 197, 94, 0.2));
-        }
-
-        .panel-item.data-crawler i {
-            color: #10b981;
-        }
-
         /* 颜色选项 */
         .color-options {
             display: flex;
@@ -385,7 +357,6 @@
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
-            backdrop-filter: blur(3px);
         }
 
         .modal.visible {
@@ -402,12 +373,6 @@
             max-height: 80vh;
             overflow-y: auto;
             box-shadow: var(--shadow-xl);
-            transform: translateY(20px);
-            transition: transform 0.3s ease;
-        }
-
-        .modal.visible .modal-content {
-            transform: translateY(0);
         }
 
         .modal-header {
@@ -450,120 +415,346 @@
             color: var(--text-primary);
         }
 
-        /* 书架模态窗口特定样式 */
-        .book-shelf-form {
-            background: var(--bg-secondary);
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        .form-group label {
-            display: block;
-            color: var(--text-primary);
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 14px;
-            color: var(--text-primary);
-            background: var(--bg-surface);
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 16px;
-        }
-
-        .book-list {
+        /* 折叠面板样式 */
+        .accordion-container {
             display: flex;
             flex-direction: column;
             gap: 10px;
-            max-height: 300px;
-            overflow-y: auto;
-            padding-right: 8px;
+            margin-bottom: 20px;
         }
-
-        .book-item {
+        
+        .accordion-item {
+            background: var(--bg-surface);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .accordion-header {
+            padding: 16px 20px;
+            background: var(--bg-secondary);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px solid transparent;
+        }
+        
+        .accordion-header:hover {
+            background: #f1f5f9;
+        }
+        
+        .accordion-header.active {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.05), rgba(129, 140, 248, 0.05));
+            border-bottom: 1px solid var(--primary);
+        }
+        
+        .accordion-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 15px;
+        }
+        
+        .accordion-icon {
+            color: var(--primary);
+            font-size: 16px;
+        }
+        
+        .accordion-arrow {
+            color: var(--text-secondary);
+            font-size: 14px;
+            transition: transform 0.3s ease;
+        }
+        
+        .accordion-arrow.active {
+            transform: rotate(180deg);
+            color: var(--primary);
+        }
+        
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            background: var(--bg-surface);
+        }
+        
+        .accordion-content.active {
+            max-height: 1000px;
+            padding: 20px;
+        }
+        
+        .accordion-description {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 16px;
+            padding: 8px 12px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .book-card {
             background: var(--bg-secondary);
             border-radius: 12px;
-            color: var(--text-primary);
+            padding: 16px;
             transition: all 0.2s;
-        }
-
-        .book-item:hover {
-            background: #f1f5f9;
-            transform: translateX(3px);
-        }
-
-        .book-info {
+            border: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            flex: 1;
+            height: 100%;
         }
-
-        .book-name {
+        
+        .book-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
+        }
+        
+        .book-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(129, 140, 248, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            color: var(--primary);
+            font-size: 18px;
+        }
+        
+        .book-card-name {
             font-weight: 600;
-            margin-bottom: 4px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            line-height: 1.4;
+            font-size: 15px;
         }
-
-        .book-url {
+        
+        .book-card-desc {
             font-size: 12px;
             color: var(--text-secondary);
-            word-break: break-all;
+            flex-grow: 1;
+        }
+        
+        .book-action {
+            margin-top: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .book-action:hover {
+            background: #4338ca;
+        }
+        
+        .add-book-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 16px;
+            border: 2px dashed var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .add-book-card:hover {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.05);
+        }
+        
+        .add-book-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(34, 197, 94, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            color: var(--success);
+            font-size: 14px;
+        }
+        
+        .add-book-text {
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-align: center;
+            font-size: 13px;
+        }
+        
+        .add-book-note {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: 4px;
+            font-style: italic;
         }
 
-        .book-actions {
+        /* 工具样式 */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        
+        .tool-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.2s;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
+        }
+        
+        .tool-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(129, 140, 248, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            color: var(--primary);
+            font-size: 18px;
+        }
+        
+        .tool-card-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            line-height: 1.4;
+            font-size: 15px;
+        }
+        
+        .tool-card-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            flex-grow: 1;
+            margin-bottom: 12px;
+        }
+        
+        .tool-actions {
             display: flex;
             gap: 8px;
+            margin-top: auto;
         }
-
-        .book-btn {
-            padding: 6px 12px;
-            border-radius: 8px;
+        
+        .tool-open-btn {
+            flex: 1;
+            background: var(--primary);
+            color: white;
             border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .tool-open-btn:hover {
+            background: #4338ca;
+        }
+        
+        .tool-delete-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
             font-size: 13px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
         }
-
-        .book-btn.open {
-            background: var(--primary);
-            color: white;
-        }
-
-        .book-btn.open:hover {
-            background: #4338ca;
-        }
-
-        .book-btn.delete {
-            background: var(--danger);
-            color: white;
-        }
-
-        .book-btn.delete:hover {
+        
+        .tool-delete-btn:hover {
             background: #dc2626;
+        }
+        
+        .tool-delete-btn.hidden {
+            display: none;
+        }
+        
+        .add-tool-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 16px;
+            border: 2px dashed var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .add-tool-card:hover {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.05);
+        }
+        
+        .add-tool-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(34, 197, 94, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            color: var(--success);
+            font-size: 14px;
+        }
+        
+        .add-tool-text {
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-align: center;
+            font-size: 13px;
+        }
+        
+        .add-tool-note {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: 4px;
+            font-style: italic;
         }
 
         /* 数据爬取模态窗口特定样式 */
@@ -1105,14 +1296,22 @@
                 grid-template-columns: 1fr;
             }
             
-            .book-actions {
-                flex-direction: column;
-                gap: 4px;
+            .book-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
             
-            .book-btn {
-                padding: 4px 8px;
-                font-size: 12px;
+            .tools-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .book-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -1135,7 +1334,7 @@
         <div class="content">
             <div class="current-info">
                 <div style="margin-bottom: 6px; color: var(--text-secondary); font-size: 14px;">当前播放</div>
-                <div id="current-file-name" class="current-file">示例文本 1</div>
+                <div id="current-file-name" class="current-file">示例文本</div>
             </div>
             
             <div class="text-display-container">
@@ -1196,16 +1395,6 @@
                     <div class="panel-item book-shelf" id="book-shelf-btn">
                         <i class="fa fa-book"></i>
                         <span>书架</span>
-                    </div>
-                    <!-- 章节分割器链接 -->
-                    <a href="https://www.shuidi365.cn/tools/txtChapterSplit/" target="_blank" class="panel-item chapter-splitter">
-                        <i class="fa fa-scissors"></i>
-                        <span>章节分割器</span>
-                    </a>
-                    <!-- 数据爬取功能 -->
-                    <div class="panel-item data-crawler" id="crawl-data-btn">
-                        <i class="fa fa-cloud-download"></i>
-                        <span>一键爬取数据</span>
                     </div>
                 </div>
                 
@@ -1393,7 +1582,7 @@
         </div>
     </div>
     
-    <!-- 模态窗口：书架 -->
+    <!-- 模态窗口：书架 - 折叠面板优化 -->
     <div id="book-shelf-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1403,39 +1592,92 @@
                 </button>
             </div>
             
-            <div class="book-shelf-form">
-                <h3 style="color: var(--text-primary); margin-bottom: 12px; font-size: 15px;">添加新书籍</h3>
-                <div class="form-group">
-                    <label for="book-name">书名</label>
-                    <input type="text" id="book-name" placeholder="请输入书名">
+            <!-- 折叠面板容器 -->
+            <div class="accordion-container">
+                <!-- 我的书城面板 -->
+                <div class="accordion-item" id="book-city-accordion">
+                    <div class="accordion-header active" data-target="book-city-content">
+                        <div class="accordion-title">
+                            <i class="fa fa-book accordion-icon"></i>
+                            <span>我的书城</span>
+                        </div>
+                        <i class="fa fa-chevron-down accordion-arrow active"></i>
+                    </div>
+                    <div class="accordion-content active" id="book-city-content">
+                        <div class="accordion-description">在线阅读网站，随时随地畅享阅读</div>
+                        <div class="book-grid" id="book-city-grid">
+                            <!-- 我的书城书籍将动态生成 -->
+                        </div>
+                        
+                        <!-- 添加自定义书籍卡片 -->
+                        <div class="add-book-card" id="add-book-city-card">
+                            <div class="add-book-icon">
+                                <i class="fa fa-plus"></i>
+                            </div>
+                            <div class="add-book-text">添加自定义</div>
+                            <div class="add-book-note">数据不同步仅存本机</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="book-url">链接</label>
-                    <input type="text" id="book-url" placeholder="请输入链接地址">
+                
+                <!-- 推荐书本面板 -->
+                <div class="accordion-item" id="recommended-accordion">
+                    <div class="accordion-header" data-target="recommended-content">
+                        <div class="accordion-title">
+                            <i class="fa fa-star accordion-icon"></i>
+                            <span>推荐书本</span>
+                        </div>
+                        <i class="fa fa-chevron-down accordion-arrow"></i>
+                    </div>
+                    <div class="accordion-content" id="recommended-content">
+                        <div class="accordion-description">精选推荐，优质资源一键直达</div>
+                        <div class="book-grid" id="recommended-grid">
+                            <!-- 推荐书籍将动态生成 -->
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="book-password">链接密码（可选）</label>
-                    <input type="text" id="book-password" placeholder="请输入链接密码（如需要）">
+                
+                <!-- 我的收藏面板 -->
+                <div class="accordion-item" id="collection-accordion">
+                    <div class="accordion-header" data-target="collection-content">
+                        <div class="accordion-title">
+                            <i class="fa fa-heart accordion-icon"></i>
+                            <span>我的收藏</span>
+                        </div>
+                        <i class="fa fa-chevron-down accordion-arrow"></i>
+                    </div>
+                    <div class="accordion-content" id="collection-content">
+                        <div class="accordion-description">个人收藏，便捷访问常用资源</div>
+                        <div class="book-grid" id="collection-grid">
+                            <!-- 收藏书籍将动态生成 -->
+                        </div>
+                        
+                        <!-- 添加自定义收藏卡片 -->
+                        <div class="add-book-card" id="add-collection-card">
+                            <div class="add-book-icon">
+                                <i class="fa fa-plus"></i>
+                            </div>
+                            <div class="add-book-text">添加自定义</div>
+                            <div class="add-book-note">数据不同步仅存本机</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-actions">
-                    <button id="add-book-btn" class="header-btn" style="background: var(--primary); color: white; border-color: var(--primary);">
-                        <i class="fa fa-plus"></i> 添加书籍
-                    </button>
-                    <button id="reset-book-form-btn" class="header-btn">
-                        <i class="fa fa-undo"></i> 重置
-                    </button>
-                </div>
-            </div>
-            
-            <div>
-                <h3 style="color: var(--text-primary); margin-bottom: 12px; font-size: 15px;">已添加的书籍</h3>
-                <div id="book-list" class="book-list">
-                    <!-- 书籍列表将动态生成 -->
-                </div>
-                <div id="no-books-message" class="empty-message" style="display: block;">
-                    <i class="fa fa-book" style="font-size: 48px; margin-bottom: 12px; color: #cbd5e1;"></i>
-                    <p>暂无书籍</p>
-                    <p style="font-size: 14px; margin-top: 6px;">点击"添加书籍"按钮添加书籍到书架</p>
+                
+                <!-- 实用工具面板 -->
+                <div class="accordion-item" id="tools-accordion">
+                    <div class="accordion-header" data-target="tools-content">
+                        <div class="accordion-title">
+                            <i class="fa fa-wrench accordion-icon"></i>
+                            <span>实用工具</span>
+                        </div>
+                        <i class="fa fa-chevron-down accordion-arrow"></i>
+                    </div>
+                    <div class="accordion-content" id="tools-content">
+                        <div class="accordion-description">常用工具，便捷访问（自定义工具仅保存在本机）</div>
+                        <div class="tools-grid" id="tools-grid">
+                            <!-- 工具将动态生成 -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1466,7 +1708,16 @@
                 this.currentFolder = null;
                 this.isCrawling = false;
                 this.crawledData = [];
-                this.books = []; // 书架数据
+                
+                // 书架数据
+                this.books = {
+                    bookCity: [],    // 我的书城
+                    recommended: [], // 推荐书本
+                    collection: []   // 我的收藏
+                };
+                
+                // 工具数据
+                this.tools = [];
                 
                 // 初始化
                 this.init();
@@ -1477,9 +1728,13 @@
                 this.bindEvents();
                 this.loadFromStorage();
                 this.addExampleTexts();
+                this.loadDefaultBooks(); // 加载默认书籍
+                this.loadDefaultTools(); // 加载默认工具
+                this.renderBookPanels(); // 渲染书架面板
+                this.renderToolsGrid();  // 渲染工具网格
                 this.updateUI();
                 this.displayCurrentText();
-                this.loadDefaultBooks(); // 加载默认书籍
+                this.initAccordions();   // 初始化折叠面板
             }
 
             bindElements() {
@@ -1524,14 +1779,18 @@
                 this.noFilesMessage = document.getElementById('no-files-message');
                 
                 // 书架相关元素
-                this.bookList = document.getElementById('book-list');
-                this.noBooksMessage = document.getElementById('no-books-message');
-                this.bookNameInput = document.getElementById('book-name');
-                this.bookUrlInput = document.getElementById('book-url');
-                this.bookPasswordInput = document.getElementById('book-password');
-                this.addBookBtn = document.getElementById('add-book-btn');
-                this.resetBookFormBtn = document.getElementById('reset-book-form-btn');
-                this.bookShelfBtn = document.getElementById('book-shelf-btn');
+                this.bookCityGrid = document.getElementById('book-city-grid');
+                this.recommendedGrid = document.getElementById('recommended-grid');
+                this.collectionGrid = document.getElementById('collection-grid');
+                this.addBookCityCard = document.getElementById('add-book-city-card');
+                this.addCollectionCard = document.getElementById('add-collection-card');
+                
+                // 折叠面板相关元素
+                this.accordionHeaders = document.querySelectorAll('.accordion-header');
+                this.accordionContents = document.querySelectorAll('.accordion-content');
+                
+                // 工具相关元素
+                this.toolsGrid = document.getElementById('tools-grid');
                 
                 // 关闭按钮
                 this.closeFileListModalBtn = document.getElementById('close-file-list-modal');
@@ -1547,7 +1806,7 @@
                 // 导入面板按钮
                 this.importFileBtn = document.getElementById('import-file');
                 this.importFolderBtn = document.getElementById('import-folder');
-                this.crawlDataBtn = document.getElementById('crawl-data-btn');
+                this.bookShelfBtn = document.getElementById('book-shelf-btn');
                 
                 // 背景设置
                 this.backgroundOpacityInput = document.getElementById('background-opacity');
@@ -1648,13 +1907,6 @@
                     this.hideAllPanels();
                 });
                 
-                // 数据爬取按钮
-                this.crawlDataBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    this.showCrawlModal();
-                    this.hideAllPanels();
-                });
-                
                 // 文件输入事件
                 this.fileInput.addEventListener('change', (e) => this.handleFileUpload(e));
                 this.folderInput.addEventListener('change', (e) => this.handleFolderUpload(e));
@@ -1703,6 +1955,16 @@
                     this.setBackgroundOpacity(parseFloat(e.target.value));
                 });
                 
+                // 我的书城自定义添加
+                this.addBookCityCard.addEventListener('click', () => {
+                    this.addCustomBook('bookCity');
+                });
+                
+                // 我的收藏自定义添加
+                this.addCollectionCard.addEventListener('click', () => {
+                    this.addCustomBook('collection');
+                });
+                
                 // 关闭模态窗口
                 this.closeFileListModalBtn.addEventListener('click', () => this.hideFileListModal());
                 this.closeFontSizeModalBtn.addEventListener('click', () => this.hideFontSizeModal());
@@ -1710,10 +1972,6 @@
                 this.closeCrawlModalBtn.addEventListener('click', () => this.hideCrawlModal());
                 this.cancelCrawlBtn.addEventListener('click', () => this.hideCrawlModal());
                 this.closeBookShelfModalBtn.addEventListener('click', () => this.hideBookShelfModal());
-                
-                // 书架相关事件
-                this.addBookBtn.addEventListener('click', () => this.addBook());
-                this.resetBookFormBtn.addEventListener('click', () => this.resetBookForm());
                 
                 // 数据爬取事件
                 this.startCrawlBtn.addEventListener('click', () => this.startCrawling());
@@ -1759,6 +2017,549 @@
                 this.bookShelfModal.addEventListener('click', (e) => {
                     if (e.target === this.bookShelfModal) this.hideBookShelfModal();
                 });
+            }
+            
+            // 初始化折叠面板
+            initAccordions() {
+                this.accordionHeaders.forEach(header => {
+                    header.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const targetId = header.dataset.target;
+                        const content = document.getElementById(targetId);
+                        const arrow = header.querySelector('.accordion-arrow');
+                        
+                        // 切换当前面板
+                        if (content.classList.contains('active')) {
+                            // 如果已经展开，则关闭
+                            content.classList.remove('active');
+                            header.classList.remove('active');
+                            arrow.classList.remove('active');
+                        } else {
+                            // 如果未展开，则展开并关闭其他面板
+                            this.accordionContents.forEach(c => {
+                                c.classList.remove('active');
+                            });
+                            this.accordionHeaders.forEach(h => {
+                                h.classList.remove('active');
+                                h.querySelector('.accordion-arrow').classList.remove('active');
+                            });
+                            
+                            // 展开当前面板
+                            content.classList.add('active');
+                            header.classList.add('active');
+                            arrow.classList.add('active');
+                        }
+                    });
+                });
+            }
+            
+            // 添加自定义书籍（简化版）
+            addCustomBook(panelType) {
+                const name = prompt('请输入网站名称：');
+                if (!name) return;
+                
+                const url = prompt('请输入网站链接：');
+                if (!url) return;
+                
+                // 验证URL格式
+                if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                    this.showNotification('请输入有效的链接地址（以http://或https://开头）', 'warning');
+                    return;
+                }
+                
+                const book = {
+                    id: 'custom-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9),
+                    name: name,
+                    url: url,
+                    desc: '自定义添加',
+                    added: new Date().getTime(),
+                    isCustom: true
+                };
+                
+                // 添加到对应的面板
+                this.books[panelType].push(book);
+                this.saveBooksToStorage();
+                this.renderBookPanels();
+                
+                this.showNotification(`已添加: ${name}`, 'success');
+            }
+            
+            // 加载默认工具
+            loadDefaultTools() {
+                const defaultTools = [
+                    {
+                        id: 'tool-wps',
+                        name: 'WPS便签',
+                        url: 'https://note.wps.cn/',
+                        desc: '便捷的在线笔记工具',
+                        icon: 'fa-sticky-note',
+                        isCustom: false
+                    },
+                    {
+                        id: 'tool-chapter',
+                        name: '章节切割器',
+                        url: 'https://www.shuidi365.cn/tools/txtChapterSplit/',
+                        desc: '文本章节分割工具',
+                        icon: 'fa-scissors',
+                        isCustom: false
+                    },
+                    {
+                        id: 'tool-crawl',
+                        name: '一键爬取数据',
+                        url: '#',
+                        desc: '智能数据爬取功能',
+                        icon: 'fa-cloud-download',
+                        isCustom: false,
+                        action: 'crawl' // 特殊标记，表示点击时执行功能而非打开链接
+                    }
+                ];
+                
+                // 检查本地存储中是否已有工具数据
+                const savedTools = localStorage.getItem('textCarouselTools');
+                if (!savedTools) {
+                    this.tools = defaultTools;
+                    this.saveToolsToStorage();
+                } else {
+                    this.loadToolsFromStorage();
+                    // 确保默认工具存在
+                    defaultTools.forEach(defaultTool => {
+                        if (!this.tools.find(tool => tool.id === defaultTool.id)) {
+                            this.tools.push(defaultTool);
+                        }
+                    });
+                    this.saveToolsToStorage();
+                }
+            }
+            
+            // 渲染工具网格
+            renderToolsGrid() {
+                this.toolsGrid.innerHTML = '';
+                
+                this.tools.forEach(tool => {
+                    const toolCard = document.createElement('div');
+                    toolCard.className = 'tool-card';
+                    
+                    toolCard.innerHTML = `
+                        <div class="tool-icon">
+                            <i class="fa ${tool.icon || 'fa-wrench'}"></i>
+                        </div>
+                        <div class="tool-card-name">${tool.name}</div>
+                        <div class="tool-card-desc">${tool.desc || ''}</div>
+                        <div class="tool-actions">
+                            <button class="tool-open-btn" data-tool-id="${tool.id}">打开</button>
+                            ${tool.isCustom ? '<button class="tool-delete-btn" data-tool-id="' + tool.id + '">删除</button>' : '<button class="tool-delete-btn hidden" data-tool-id="' + tool.id + '">删除</button>'}
+                        </div>
+                    `;
+                    
+                    this.toolsGrid.appendChild(toolCard);
+                });
+                
+                // 添加工具卡片
+                const addToolCard = document.createElement('div');
+                addToolCard.className = 'add-tool-card';
+                addToolCard.innerHTML = `
+                    <div class="add-tool-icon">
+                        <i class="fa fa-plus"></i>
+                    </div>
+                    <div class="add-tool-text">添加自定义工具</div>
+                    <div class="add-tool-note">数据不同步仅存本机</div>
+                `;
+                
+                addToolCard.addEventListener('click', () => {
+                    this.addCustomTool();
+                });
+                
+                this.toolsGrid.appendChild(addToolCard);
+                
+                // 绑定工具按钮事件
+                this.bindToolEvents();
+            }
+            
+            // 绑定工具按钮事件
+            bindToolEvents() {
+                // 绑定打开按钮事件
+                document.querySelectorAll('.tool-open-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const toolId = e.currentTarget.dataset.toolId;
+                        const tool = this.tools.find(t => t.id === toolId);
+                        
+                        if (tool) {
+                            if (tool.action === 'crawl') {
+                                // 如果是爬取功能，显示爬取模态窗口
+                                this.showCrawlModal();
+                                this.hideBookShelfModal();
+                            } else {
+                                // 否则打开链接
+                                window.open(tool.url, '_blank');
+                                this.showNotification(`正在打开: ${tool.name}`, 'info');
+                            }
+                        }
+                    });
+                });
+                
+                // 绑定删除按钮事件
+                document.querySelectorAll('.tool-delete-btn:not(.hidden)').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const toolId = e.currentTarget.dataset.toolId;
+                        this.deleteCustomTool(toolId);
+                    });
+                });
+            }
+            
+            // 添加自定义工具
+            addCustomTool() {
+                const name = prompt('请输入工具名称：');
+                if (!name) return;
+                
+                const url = prompt('请输入工具链接（输入#留空则不打开链接）：');
+                if (!url) return;
+                
+                const desc = prompt('请输入工具描述：') || '';
+                
+                // 验证URL格式（如果提供了URL且不是#）
+                if (url !== '#' && !url.startsWith('http://') && !url.startsWith('https://')) {
+                    this.showNotification('请输入有效的链接地址（以http://或https://开头），或输入#留空', 'warning');
+                    return;
+                }
+                
+                const tool = {
+                    id: 'tool-custom-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9),
+                    name: name,
+                    url: url,
+                    desc: desc,
+                    icon: 'fa-external-link',
+                    isCustom: true
+                };
+                
+                // 添加到工具列表
+                this.tools.push(tool);
+                this.saveToolsToStorage();
+                this.renderToolsGrid();
+                
+                this.showNotification(`已添加工具: ${name}`, 'success');
+            }
+            
+            // 删除自定义工具
+            deleteCustomTool(toolId) {
+                const tool = this.tools.find(t => t.id === toolId);
+                
+                if (!tool) {
+                    this.showNotification('未找到该工具', 'error');
+                    return;
+                }
+                
+                if (!tool.isCustom) {
+                    this.showNotification('默认工具不可删除', 'warning');
+                    return;
+                }
+                
+                if (confirm(`确定要删除工具 "${tool.name}" 吗？`)) {
+                    const index = this.tools.findIndex(t => t.id === toolId);
+                    if (index !== -1) {
+                        this.tools.splice(index, 1);
+                        this.saveToolsToStorage();
+                        this.renderToolsGrid();
+                        this.showNotification(`已删除工具: ${tool.name}`, 'success');
+                    }
+                }
+            }
+            
+            // 保存工具数据到本地存储
+            saveToolsToStorage() {
+                try {
+                    localStorage.setItem('textCarouselTools', JSON.stringify(this.tools));
+                } catch (e) {
+                    console.error('保存工具数据失败:', e);
+                    this.showNotification('保存工具数据失败', 'error');
+                }
+            }
+            
+            // 从本地存储加载工具数据
+            loadToolsFromStorage() {
+                try {
+                    const data = localStorage.getItem('textCarouselTools');
+                    if (data) {
+                        const parsed = JSON.parse(data);
+                        this.tools = parsed || [];
+                    }
+                } catch (e) {
+                    console.error('加载工具数据失败:', e);
+                    this.showNotification('加载工具数据失败', 'error');
+                }
+            }
+            
+            // 加载默认书籍 - 修复版
+            loadDefaultBooks() {
+                // 我的书城 - 按照要求更新
+                const defaultBookCity = [
+                    {
+                        id: 'book-city-1',
+                        name: 'txt小说网',
+                        url: 'https://txtxiaoshuo.com/',
+                        icon: 'fa-book',
+                        desc: '海量小说在线阅读',
+                        added: new Date().getTime(),
+                        isCustom: false
+                    },
+                    {
+                        id: 'book-city-2',
+                        name: 'Z-library（世界第一电子书网）',
+                        url: 'https://zh.cub101.ru/',
+                        icon: 'fa-globe',
+                        desc: '全球最大电子书库',
+                        added: new Date().getTime(),
+                        isCustom: false
+                    },
+                    {
+                        id: 'book-city-3',
+                        name: '新书包网',
+                        url: 'https://www.xbookbao.net/',
+                        icon: 'fa-book',
+                        desc: '热门小说资源',
+                        added: new Date().getTime(),
+                        isCustom: false
+                    },
+                    {
+                        id: 'book-city-4',
+                        name: '笔趣阁',
+                        url: 'http://zhtjx.com/',
+                        icon: 'fa-book',
+                        desc: '经典小说阅读',
+                        added: new Date().getTime(),
+                        isCustom: false
+                    }
+                ];
+                
+                // 推荐书本 - 按照要求更新
+                const defaultRecommended = [
+                    {
+                        id: 'recommended-1',
+                        name: '魔道祖师下载密码：2025',
+                        url: 'https://wwbpm.lanzoue.com/b00l2hafsf',
+                        icon: 'fa-download',
+                        desc: '热门小说资源',
+                        added: new Date().getTime(),
+                        isCustom: false
+                    },
+                    {
+                        id: 'recommended-2',
+                        name: '考研单词下载密码：2025',
+                        url: 'https://wwbpm.lanzoue.com/b00l2hafre',
+                        icon: 'fa-download',
+                        desc: '学习资料',
+                        added: new Date().getTime(),
+                        isCustom: false
+                    },
+                    {
+                        id: 'recommended-3',
+                        name: '推荐书本更新中下载密码：2025',
+                        url: 'https://wwbpm.lanzoue.com/b00l2hbi1c',
+                        icon: 'fa-refresh',
+                        desc: '持续更新中',
+                        added: new Date().getTime(),
+                        isCustom: false
+                    },
+                    {
+                        id: 'recommended-4',
+                        name: '文本轮播器使用说明书',
+                        url: 'http://photogzmaz.photo.store.qq.com/psc?/V52Q8F7n4RatXA22tZ1W0xsVfm36uxdb/TmEUgtj9EK6.7V8ajmQrECnvVtOdH0cayf3QZTQPoixxIt39eNKkKvAqrbe7e7lz1CsaPXUrMmY6k9rlLpy7EMMo*j5qTcdXiwUJ2MJ6LD4!/b&bo=MAPmBTAD5gUDJwI!&rf=viewer_4&t=5',
+                        icon: 'fa-file-text',
+                        desc: '使用说明文档',
+                        added: new Date().getTime(),
+                        isCustom: false
+                    }
+                ];
+                
+                // 我的收藏 - 按照要求更新
+                const defaultCollection = [
+                    {
+                        id: 'collection-1',
+                        name: '蓝奏云盘',
+                        url: 'https://pc.woozooo.com/',
+                        icon: 'fa-cloud',
+                        desc: '文件存储分享',
+                        added: new Date().getTime(),
+                        isCustom: false
+                    },
+                    {
+                        id: 'collection-2',
+                        name: '百度云盘',
+                        url: 'https://pan.baidu.com/disk/main#/index?category=all',
+                        icon: 'fa-cloud',
+                        desc: '云端存储服务',
+                        added: new Date().getTime(),
+                        isCustom: false
+                    },
+                    {
+                        id: 'collection-3',
+                        name: '夸克网盘',
+                        url: 'https://pan.quark.cn/',
+                        icon: 'fa-cloud',
+                        desc: '智能云存储',
+                        added: new Date().getTime(),
+                        isCustom: false
+                    },
+                    {
+                        id: 'collection-4',
+                        name: '阿里云盘',
+                        url: 'https://www.alipan.com/sign/in?',
+                        icon: 'fa-cloud',
+                        desc: '高速云存储',
+                        added: new Date().getTime(),
+                        isCustom: false
+                    }
+                ];
+                
+                // 检查本地存储中是否已有数据
+                const savedData = localStorage.getItem('textCarouselBooks');
+                if (!savedData) {
+                    // 如果没有保存的数据，使用默认数据
+                    this.books = {
+                        bookCity: defaultBookCity,
+                        recommended: defaultRecommended,
+                        collection: defaultCollection
+                    };
+                    this.saveBooksToStorage();
+                } else {
+                    // 如果有保存的数据，则加载它
+                    try {
+                        const parsed = JSON.parse(savedData);
+                        // 确保每个面板都有默认数据
+                        this.books = {
+                            bookCity: this.mergeBooks(parsed.bookCity || [], defaultBookCity),
+                            recommended: this.mergeBooks(parsed.recommended || [], defaultRecommended),
+                            collection: this.mergeBooks(parsed.collection || [], defaultCollection)
+                        };
+                        this.saveBooksToStorage();
+                    } catch (e) {
+                        console.error('解析保存的书架数据失败，使用默认数据', e);
+                        this.books = {
+                            bookCity: defaultBookCity,
+                            recommended: defaultRecommended,
+                            collection: defaultCollection
+                        };
+                        this.saveBooksToStorage();
+                    }
+                }
+            }
+            
+            // 合并书籍数据，确保默认书籍存在
+            mergeBooks(savedBooks, defaultBooks) {
+                // 创建一个映射来存储书籍
+                const bookMap = new Map();
+                
+                // 首先添加所有默认书籍
+                defaultBooks.forEach(book => {
+                    bookMap.set(book.id, book);
+                });
+                
+                // 然后添加保存的书籍（覆盖默认书籍，如果存在）
+                savedBooks.forEach(book => {
+                    // 如果保存的书籍有isCustom标记，保留它
+                    if (book.isCustom) {
+                        bookMap.set(book.id, book);
+                    } else {
+                        // 对于非自定义书籍，如果默认书籍中已有，则保留默认的
+                        if (!bookMap.has(book.id)) {
+                            bookMap.set(book.id, book);
+                        }
+                    }
+                });
+                
+                // 转换为数组并返回
+                return Array.from(bookMap.values());
+            }
+            
+            // 渲染书架面板
+            renderBookPanels() {
+                // 渲染我的书城
+                this.renderBookGrid(this.bookCityGrid, this.books.bookCity, 'bookCity');
+                
+                // 渲染推荐书本
+                this.renderBookGrid(this.recommendedGrid, this.books.recommended, 'recommended');
+                
+                // 渲染我的收藏
+                this.renderBookGrid(this.collectionGrid, this.books.collection, 'collection');
+            }
+            
+            // 渲染书籍网格
+            renderBookGrid(gridElement, books, panelType) {
+                gridElement.innerHTML = '';
+                
+                books.forEach(book => {
+                    const bookCard = document.createElement('div');
+                    bookCard.className = 'book-card';
+                    
+                    let iconClass = book.icon || 'fa-external-link';
+                    
+                    bookCard.innerHTML = `
+                        <div class="book-icon">
+                            <i class="fa ${iconClass}"></i>
+                        </div>
+                        <div class="book-card-name">${book.name}</div>
+                        <div class="book-card-desc">${book.desc || ''}</div>
+                        <button class="book-action">打开</button>
+                    `;
+                    
+                    // 添加打开链接事件
+                    const openBtn = bookCard.querySelector('.book-action');
+                    openBtn.addEventListener('click', () => {
+                        window.open(book.url, '_blank');
+                        this.showNotification(`正在打开: ${book.name}`, 'info');
+                    });
+                    
+                    // 如果是自定义书籍，添加删除按钮
+                    if (book.isCustom) {
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.className = 'book-action';
+                        deleteBtn.style.background = 'var(--danger)';
+                        deleteBtn.style.marginTop = '8px';
+                        deleteBtn.textContent = '删除';
+                        deleteBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            if (confirm(`确定要删除 "${book.name}" 吗？`)) {
+                                const index = this.books[panelType].findIndex(b => b.id === book.id);
+                                if (index !== -1) {
+                                    this.books[panelType].splice(index, 1);
+                                    this.saveBooksToStorage();
+                                    this.renderBookPanels();
+                                    this.showNotification(`已删除: ${book.name}`, 'success');
+                                }
+                            }
+                        });
+                        bookCard.appendChild(deleteBtn);
+                    }
+                    
+                    gridElement.appendChild(bookCard);
+                });
+            }
+            
+            // 保存书架数据到本地存储
+            saveBooksToStorage() {
+                try {
+                    localStorage.setItem('textCarouselBooks', JSON.stringify(this.books));
+                } catch (e) {
+                    console.error('保存书架数据失败:', e);
+                    this.showNotification('保存书架数据失败', 'error');
+                }
+            }
+            
+            // 从本地存储加载书架数据
+            loadBooksFromStorage() {
+                try {
+                    const data = localStorage.getItem('textCarouselBooks');
+                    if (data) {
+                        const parsed = JSON.parse(data);
+                        if (parsed.bookCity) this.books.bookCity = parsed.bookCity;
+                        if (parsed.recommended) this.books.recommended = parsed.recommended;
+                        if (parsed.collection) this.books.collection = parsed.collection;
+                    }
+                } catch (e) {
+                    console.error('加载书架数据失败:', e);
+                    this.showNotification('加载书架数据失败', 'error');
+                }
             }
             
             // 切换面板显示/隐藏
@@ -1965,7 +2766,8 @@
             // 显示书架模态框
             showBookShelfModal() {
                 this.bookShelfModal.classList.add('visible');
-                this.renderBookList();
+                this.renderBookPanels();
+                this.renderToolsGrid();
             }
 
             // 隐藏书架模态框
@@ -2032,7 +2834,7 @@
                     
                     // 添加删除文件夹事件
                     folderDeleteBtn.addEventListener('click', (e) => {
-                        e.stopPropagation(); // 防止触发文件夹展开/折叠
+                        e.stopPropagation();
                         this.deleteFolder(folder);
                     });
                     
@@ -2045,10 +2847,7 @@
                     
                     // 文件夹点击展开/折叠
                     folderHeader.addEventListener('click', (e) => {
-                        // 如果点击的是删除按钮，不触发展开/折叠
-                        if (e.target.closest('.folder-delete-btn')) {
-                            return;
-                        }
+                        if (e.target.closest('.folder-delete-btn')) return;
                         folderContent.style.display = folderContent.style.display === 'none' ? 'block' : 'none';
                         folderInfo.querySelector('i').className = folderContent.style.display === 'none' 
                             ? 'fa fa-folder-o' 
@@ -2105,7 +2904,7 @@
                 `;
                 
                 fileItem.querySelector('.file-action').addEventListener('click', () => {
-                    this.currentFolder = null; // 清除当前文件夹，只播放单个文件
+                    this.currentFolder = null;
                     this.currentTextIndex = this.texts.findIndex(t => t.id === file.id);
                     this.displayCurrentText();
                     this.hideFileListModal();
@@ -2122,21 +2921,17 @@
                 const fileCount = folder.files ? folder.files.length : 0;
                 
                 if (confirm(`确定要删除整个文件夹 "${folderName}" 吗？\n该文件夹包含 ${fileCount} 个文件，删除后无法恢复。`)) {
-                    // 从文本列表中删除该文件夹的所有文件
                     this.texts = this.texts.filter(text => {
-                        // 如果文件属于要删除的文件夹，删除它
                         if (text.folder && text.folder.id === folder.id) {
                             return false;
                         }
                         return true;
                     });
                     
-                    // 如果当前正在播放这个文件夹，清除当前文件夹
                     if (this.currentFolder && this.currentFolder.id === folder.id) {
                         this.currentFolder = null;
                     }
                     
-                    // 重置当前文本索引
                     this.currentTextIndex = Math.min(this.currentTextIndex, this.texts.length - 1);
                     if (this.texts.length === 0) {
                         this.currentTextIndex = 0;
@@ -2150,188 +2945,6 @@
                 }
             }
 
-            // ==================== 书架功能 ====================
-            
-            // 加载默认书籍
-            loadDefaultBooks() {
-                const defaultBooks = [
-                    {
-                        id: 'book-1',
-                        name: '魔道祖师',
-                        url: 'https://wwbpm.lanzoue.com/b00l2hafsf',
-                        password: '',
-                        added: new Date().getTime()
-                    },
-                    {
-                        id: 'book-2',
-                        name: '考研英语',
-                        url: 'https://wwbpm.lanzoue.com/b00l2hafre',
-                        password: '',
-                        added: new Date().getTime()
-                    },
-                    {
-                        id: 'book-3',
-                        name: '文本建议拆分10kb/章',
-                        url: 'https://www.shuidi365.cn/tools/txtSplit/',
-                        password: '',
-                        added: new Date().getTime()
-                    }
-                ];
-                
-                // 只有在没有书籍时才添加默认书籍
-                if (this.books.length === 0) {
-                    this.books = defaultBooks;
-                    this.saveBooksToStorage();
-                }
-            }
-            
-            // 渲染书籍列表
-            renderBookList() {
-                this.bookList.innerHTML = '';
-                
-                if (this.books.length === 0) {
-                    this.noBooksMessage.style.display = 'block';
-                    return;
-                }
-                
-                this.noBooksMessage.style.display = 'none';
-                
-                // 按添加时间倒序排序
-                const sortedBooks = [...this.books].sort((a, b) => b.added - a.added);
-                
-                sortedBooks.forEach(book => {
-                    const bookItem = document.createElement('div');
-                    bookItem.className = 'book-item';
-                    
-                    const bookInfo = document.createElement('div');
-                    bookInfo.className = 'book-info';
-                    bookInfo.innerHTML = `
-                        <div class="book-name">${book.name}</div>
-                        <div class="book-url">${book.url}</div>
-                    `;
-                    
-                    const bookActions = document.createElement('div');
-                    bookActions.className = 'book-actions';
-                    
-                    const openBtn = document.createElement('button');
-                    openBtn.className = 'book-btn open';
-                    openBtn.textContent = '打开';
-                    openBtn.addEventListener('click', () => this.openBook(book));
-                    
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.className = 'book-btn delete';
-                    deleteBtn.textContent = '删除';
-                    deleteBtn.addEventListener('click', () => this.deleteBook(book.id));
-                    
-                    bookActions.appendChild(openBtn);
-                    bookActions.appendChild(deleteBtn);
-                    
-                    bookItem.appendChild(bookInfo);
-                    bookItem.appendChild(bookActions);
-                    this.bookList.appendChild(bookItem);
-                });
-            }
-            
-            // 添加书籍
-            addBook() {
-                const name = this.bookNameInput.value.trim();
-                const url = this.bookUrlInput.value.trim();
-                const password = this.bookPasswordInput.value.trim();
-                
-                if (!name) {
-                    this.showNotification('请输入书名', 'warning');
-                    return;
-                }
-                
-                if (!url) {
-                    this.showNotification('请输入链接地址', 'warning');
-                    return;
-                }
-                
-                // 验证URL格式
-                try {
-                    new URL(url);
-                } catch (e) {
-                    this.showNotification('请输入有效的链接地址', 'warning');
-                    return;
-                }
-                
-                const book = {
-                    id: 'book-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9),
-                    name: name,
-                    url: url,
-                    password: password,
-                    added: new Date().getTime()
-                };
-                
-                this.books.push(book);
-                this.saveBooksToStorage();
-                this.renderBookList();
-                this.resetBookForm();
-                
-                this.showNotification(`成功添加书籍: ${name}`, 'success');
-            }
-            
-            // 重置书籍表单
-            resetBookForm() {
-                this.bookNameInput.value = '';
-                this.bookUrlInput.value = '';
-                this.bookPasswordInput.value = '';
-                this.bookNameInput.focus();
-            }
-            
-            // 打开书籍
-            openBook(book) {
-                if (book.password) {
-                    const password = prompt(`请输入链接密码以打开 "${book.name}"`, book.password);
-                    if (password !== book.password) {
-                        this.showNotification('密码错误', 'error');
-                        return;
-                    }
-                }
-                
-                // 在新标签页中打开链接
-                window.open(book.url, '_blank');
-                this.showNotification(`正在打开: ${book.name}`, 'info');
-            }
-            
-            // 删除书籍
-            deleteBook(bookId) {
-                const book = this.books.find(b => b.id === bookId);
-                if (!book) return;
-                
-                if (confirm(`确定要删除书籍 "${book.name}" 吗？`)) {
-                    this.books = this.books.filter(b => b.id !== bookId);
-                    this.saveBooksToStorage();
-                    this.renderBookList();
-                    
-                    this.showNotification(`已删除书籍: ${book.name}`, 'success');
-                }
-            }
-            
-            // 保存书架数据到本地存储
-            saveBooksToStorage() {
-                try {
-                    localStorage.setItem('textCarouselBooks', JSON.stringify(this.books));
-                } catch (e) {
-                    console.error('保存书架数据失败:', e);
-                    this.showNotification('保存书架数据失败', 'error');
-                }
-            }
-            
-            // 从本地存储加载书架数据
-            loadBooksFromStorage() {
-                try {
-                    const data = localStorage.getItem('textCarouselBooks');
-                    if (data) {
-                        this.books = JSON.parse(data);
-                    }
-                } catch (e) {
-                    console.error('加载书架数据失败:', e);
-                    this.showNotification('加载书架数据失败', 'error');
-                }
-            }
-
             // ==================== 其他功能 ====================
 
             // 处理文件上传
@@ -2339,6 +2952,7 @@
                 const files = e.target.files;
                 if (!files.length) return;
                 
+                let count = 0;
                 Array.from(files).forEach(file => {
                     if (file.type.includes('text') || file.name.endsWith('.txt')) {
                         const reader = new FileReader();
@@ -2350,13 +2964,14 @@
                                 content: content,
                                 added: new Date().getTime()
                             });
+                            count++;
                         };
                         reader.readAsText(file);
                     }
                 });
                 
                 this.fileInput.value = '';
-                this.showNotification(`成功导入 ${files.length} 个文件`, 'success');
+                this.showNotification(`成功导入 ${count} 个文件`, 'success');
             }
 
             // 处理文件夹上传
@@ -2364,12 +2979,11 @@
                 const files = e.target.files;
                 if (!files.length) return;
                 
-                // 按文件夹分组
                 const folders = {};
+                let count = 0;
                 
                 Array.from(files).forEach(file => {
                     if (file.type.includes('text') || file.name.endsWith('.txt')) {
-                        // 获取文件夹路径
                         const fullPath = file.webkitRelativePath;
                         const folderName = fullPath.split('/')[0];
                         const folderId = folderName + '_' + Date.now();
@@ -2393,13 +3007,14 @@
                                 folder: folders[folderId],
                                 added: new Date().getTime()
                             });
+                            count++;
                         };
                         reader.readAsText(currentFile);
                     }
                 });
                 
                 this.folderInput.value = '';
-                this.showNotification(`成功导入文件夹及文件`, 'success');
+                this.showNotification(`成功导入 ${count} 个文件`, 'success');
             }
 
             // 添加文本
@@ -2408,7 +3023,6 @@
                 this.saveToStorage();
                 this.updateUI();
                 
-                // 如果是第一个文本，自动选中
                 if (this.texts.length === 1) {
                     this.currentTextIndex = 0;
                     this.displayCurrentText();
@@ -2439,20 +3053,16 @@
                     : currentText.content;
                     
                 if (confirm(`确定要删除当前文本 "${currentText.name}" 吗？\n内容预览: ${shortText}`)) {
-                    // 从文本列表中删除
                     this.texts = this.texts.filter(t => t.id !== currentText.id);
                     
-                    // 如果删除的是当前文件夹中的文件，也从文件夹中移除
                     if (this.currentFolder && this.currentFolder.files) {
                         this.currentFolder.files = this.currentFolder.files.filter(f => f.id !== currentText.id);
                         
-                        // 如果文件夹为空，清除当前文件夹
                         if (this.currentFolder.files.length === 0) {
                             this.currentFolder = null;
                         }
                     }
                     
-                    // 重置索引
                     this.currentTextIndex = Math.min(this.currentTextIndex, this.texts.length - 1);
                     if (this.texts.length === 0) {
                         this.currentTextIndex = 0;
@@ -2506,18 +3116,15 @@
                 this.progressStatus.textContent = '正在爬取数据...';
                 
                 try {
-                    // 使用CORS代理绕过跨域限制
                     const proxyUrl = 'https://api.allorigins.win/raw?url=';
                     const targetUrl = encodeURIComponent(url);
                     
-                    // 模拟进度更新
                     this.updateCrawlProgress(10, '正在连接到网站...');
                     await this.sleep(500);
                     
                     this.updateCrawlProgress(30, '正在下载网页内容...');
                     await this.sleep(500);
                     
-                    // 实际获取网页内容
                     const response = await fetch(`${proxyUrl}${targetUrl}`);
                     if (!response.ok) {
                         throw new Error(`HTTP错误: ${response.status}`);
@@ -2531,34 +3138,27 @@
                     this.updateCrawlProgress(80, '正在提取文本数据...');
                     await this.sleep(500);
                     
-                    // 解析HTML并提取文本
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(html, 'text/html');
                     
-                    // 移除不需要的元素
                     const elementsToRemove = doc.querySelectorAll('script, style, nav, footer, header, iframe, noscript');
                     elementsToRemove.forEach(el => el.remove());
                     
-                    // 提取文本内容
                     const bodyText = doc.body.textContent || '';
-                    
-                    // 分割成句子
                     const sentences = this.splitIntoSentences(bodyText);
                     
                     this.updateCrawlProgress(90, '正在处理文本数据...');
                     await this.sleep(300);
                     
-                    // 过滤和清理句子
                     const cleanedSentences = sentences
                         .map(s => s.trim())
-                        .filter(s => s.length > 10 && s.length < 500) // 过滤太短或太长的句子
-                        .slice(0, 50); // 限制数量
+                        .filter(s => s.length > 10 && s.length < 500)
+                        .slice(0, 50);
                     
                     this.crawledData = cleanedSentences;
                     
                     this.updateCrawlProgress(100, '爬取完成！');
                     
-                    // 显示预览
                     this.showCrawlPreview();
                     this.saveCrawlBtn.disabled = false;
                     
@@ -2581,11 +3181,9 @@
                 this.progressPercent.textContent = `${percent}%`;
                 this.progressStatus.textContent = status;
                 
-                // 更新统计信息
                 const estimatedTime = Math.round((100 - percent) / 2);
                 this.timeRemaining.textContent = estimatedTime > 0 ? estimatedTime : '0';
                 
-                // 如果是模拟数据，更新数量
                 if (percent >= 80) {
                     const count = Math.round((percent - 80) / 20 * 50);
                     this.crawlCount.textContent = count > 0 ? count : '0';
@@ -2602,7 +3200,6 @@
                     return;
                 }
                 
-                // 显示前5条预览
                 const previewCount = Math.min(5, this.crawledData.length);
                 for (let i = 0; i < previewCount; i++) {
                     const sentenceDiv = document.createElement('div');
@@ -2631,14 +3228,12 @@
                 const folderName = `爬取数据_${new Date().toISOString().slice(0, 10)}`;
                 const folderId = `crawled_${Date.now()}`;
                 
-                // 创建文件夹
                 const folder = {
                     id: folderId,
                     name: folderName,
                     files: []
                 };
                 
-                // 添加每条数据
                 this.crawledData.forEach((content, index) => {
                     const textItem = {
                         id: `${folderId}_${index}`,
@@ -2668,7 +3263,6 @@
                 this.crawlProgress.classList.add('visible');
                 this.progressStatus.textContent = '正在加载预设数据...';
                 
-                // 预设数据
                 const predefinedData = {
                     news: [
                         "科技创新推动数字化转型，人工智能在各行业应用日益广泛。",
@@ -2733,7 +3327,6 @@
                 };
                 
                 try {
-                    // 模拟加载过程
                     for (let i = 0; i <= 100; i += 10) {
                         this.updateCrawlProgress(i, `正在加载${this.getSourceName(source)}数据...`);
                         await this.sleep(100);
@@ -2742,7 +3335,6 @@
                     this.crawledData = predefinedData[source] || [];
                     this.updateCrawlProgress(100, '数据加载完成！');
                     
-                    // 显示预览
                     this.showCrawlPreview();
                     this.saveCrawlBtn.disabled = false;
                     
@@ -2772,7 +3364,6 @@
             
             // 将文本分割成句子
             splitIntoSentences(text) {
-                // 使用正则表达式分割句子
                 const sentenceRegex = /[^.!?。！？]+[.!?。！？]/g;
                 const matches = text.match(sentenceRegex);
                 
@@ -2792,7 +3383,6 @@
             setSpeed(speed) {
                 this.currentSpeed = speed;
                 
-                // 更新UI
                 document.querySelectorAll('.speed-option').forEach(option => {
                     if (parseFloat(option.dataset.speed) === speed) {
                         option.classList.add('active');
@@ -2810,7 +3400,6 @@
                 this.textColor = color;
                 this.textElement.style.color = color;
                 
-                // 更新UI
                 document.querySelectorAll('.color-option').forEach(option => {
                     if (option.dataset.color === color) {
                         option.classList.add('active');
@@ -2827,7 +3416,6 @@
             setFontSize(size) {
                 this.fontSize = size;
                 
-                // 更新UI
                 document.querySelectorAll('.font-size-option').forEach(option => {
                     if (option.dataset.size === size) {
                         option.classList.add('active');
@@ -2836,7 +3424,7 @@
                     }
                 });
                 
-                this.displayCurrentText(); // 刷新文本显示以应用字体大小
+                this.displayCurrentText();
                 this.saveToStorage();
                 this.showNotification(`字体大小已设置为 ${size === 'small' ? '小号' : size === 'medium' ? '中号' : '大号'}`, 'info');
             }
@@ -2845,7 +3433,6 @@
             setBackgroundColor(preset) {
                 this.backgroundPreset = preset;
                 
-                // 更新背景样式
                 const body = document.body;
                 switch(preset) {
                     case 'default':
@@ -2868,10 +3455,8 @@
                         break;
                 }
                 
-                // 应用透明度
                 body.style.opacity = this.backgroundOpacity;
                 
-                // 更新UI
                 document.querySelectorAll('.background-option').forEach(option => {
                     if (option.dataset.bg === preset) {
                         option.classList.add('active');
@@ -2902,7 +3487,6 @@
                 
                 this.notificationArea.appendChild(notification);
                 
-                // 3秒后自动移除
                 setTimeout(() => {
                     if (notification.parentNode) {
                         notification.remove();
@@ -2959,11 +3543,9 @@
                         this.backgroundPreset = parsed.backgroundPreset || 'default';
                         this.backgroundOpacity = parsed.backgroundOpacity !== undefined ? parsed.backgroundOpacity : 1;
                         
-                        // 恢复背景设置
                         this.setBackgroundColor(this.backgroundPreset);
                         this.setBackgroundOpacity(this.backgroundOpacity);
                         
-                        // 恢复速度设置
                         document.querySelectorAll('.speed-option').forEach(option => {
                             if (parseFloat(option.dataset.speed) === this.currentSpeed) {
                                 option.classList.add('active');
@@ -2972,7 +3554,6 @@
                             }
                         });
                         
-                        // 恢复颜色设置
                         document.querySelectorAll('.color-option').forEach(option => {
                             if (option.dataset.color === this.textColor) {
                                 option.classList.add('active');
@@ -2981,7 +3562,6 @@
                             }
                         });
                         
-                        // 恢复字体大小设置
                         document.querySelectorAll('.font-size-option').forEach(option => {
                             if (option.dataset.size === this.fontSize) {
                                 option.classList.add('active');
@@ -2991,8 +3571,9 @@
                         });
                     }
                     
-                    // 加载书架数据
                     this.loadBooksFromStorage();
+                    this.loadToolsFromStorage();
+                    
                 } catch (e) {
                     console.error('加载数据失败:', e);
                     this.showNotification('加载设置失败', 'error');
@@ -3001,25 +3582,10 @@
 
             // 添加示例文本
             addExampleTexts() {
-                // 只有在没有文本时才添加示例
                 if (this.texts.length === 0) {
                     this.addText({
                         id: 'example-1',
-                        name: '示例文本 1',
-                        content: '欢迎使用智能文本轮播播放器，现在您可以一键爬取网页数据生成播放内容。',
-                        added: new Date().getTime()
-                    });
-                    
-                    this.addText({
-                        id: 'example-2',
-                        name: '示例文本 2',
-                        content: '点击"一键爬取数据"按钮，可以快速从网页获取文本内容并添加到播放列表。',
-                        added: new Date().getTime()
-                    });
-                    
-                    this.addText({
-                        id: 'example-3',
-                        name: '示例文本 3',
+                        name: '示例文本',
                         content: '支持多种预设数据源：新闻资讯、名人名言、诗词歌赋、笑话段子和知识科普。',
                         added: new Date().getTime()
                     });
